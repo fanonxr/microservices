@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	userDaoMock usersDaoMock
+	// userDaoMock usersDaoMock
 	getUserFunction = func(userID int64) (*domain.User, *utils.ApplicationError)
 )
 

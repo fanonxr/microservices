@@ -1,38 +1,35 @@
 package controllers
 
 import (
-	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"microservices/mvc/services"
 	"microservices/mvc/utils"
 	"net/http"
 	"strconv"
 )
 
-func GetUser(res http.ResponseWriter, req *http.Request) {
-	userId, err := strconv.ParseInt(req.URL.Query().Get("user_id"), 10, 64)
+func GetUser(c *gin.Context) {
+	userId, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if err != nil {
-		appErr := &utils.ApplicationError{
+		// creating our app error
+		apiErr := &utils.ApplicationError{
 			Message:    "user_id must be an number",
 			StatusCode: http.StatusBadRequest,
 			Code:       "bad_request",
 		}
-		jsonValue, _ := json.Marshal(appErr)
-		res.WriteHeader(appErr.StatusCode)
-		res.Write(jsonValue)
-		// just return the bad request to the client
+		// responding in json form
+		utils.RespondError(c, apiErr)
 		return
 	}
 
 	// calling the user service
 	user, apiErr := services.UserService.GetUser(userId)
-
 	if apiErr != nil {
-		jsonValue, _ := json.Marshal(apiErr)
-		// handle the error and return to the client
-		res.WriteHeader(apiErr.StatusCode)
-		res.Write([]byte(jsonValue))
+		utils.RespondError(c, apiErr)
 		return
 	}
-	jsonValue, _ := json.Marshal(user)
-	res.Write(jsonValue)
+	// handling the case where we have a valid user
+	utils.Respond(c, http.StatusOK, user)
 }
+
+// 1fbfe1fff05cf4568d230303927449d48e304a61
