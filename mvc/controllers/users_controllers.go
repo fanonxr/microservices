@@ -31,3 +31,5 @@ func GetUser(c *gin.Context) {
 	// handling the case where we have a valid user
 	utils.Respond(c, http.StatusOK, user)
 }
+
+// 1fbfe1fff05cf4568d230303927449d48e304a61
