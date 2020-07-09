@@ -1,2 +1,6 @@
-package api
+package main
+
+func main() {
+
+}
 
